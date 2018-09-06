@@ -82,7 +82,7 @@ Ktest       = Ktest - np.dot(unoML,K) - np.dot(Ktest,unoM) + np.dot(unoML,np.dot
 imtstproypre= np.dot(Ktest,alpha)
 
 #from sklearn.decomposition import KernelPCA
-
+# Aca programar KPCA
 #kpca = KernelPCA(n_components = None, kernel='poly', degree=2, gamma = 1, coef0 = 0)
 #kpca = KernelPCA(n_components = None, kernel='poly', degree=2)
 #kpca.fit(images)
@@ -111,3 +111,4 @@ axes.set_xlabel('No. autocaras')
 axes.grid(which='Both')
 fig.suptitle('Error')
 
+plt.show()

@@ -65,7 +65,7 @@ images  = [images[k,:]-meanimage for k in range(images.shape[0])]
 imagetst= [imagetst[k,:]-meanimage for k in range(imagetst.shape[0])]
 
 #PCA
-U,S,V = np.linalg.svd(images,full_matrices = False)
+U,S,V = np.linalg.svd(images,full_matrices = False) # Hacer inhouse
 
 #Primera autocara...
 eigen1 = (np.reshape(V[0,:],[versize,horsize]))*255
@@ -106,3 +106,4 @@ axes.set_xlabel('No. autocaras')
 axes.grid(which='Both')
 fig.suptitle('Error')
 
+plt.show()
