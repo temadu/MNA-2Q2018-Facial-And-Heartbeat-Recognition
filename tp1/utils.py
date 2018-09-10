@@ -42,7 +42,7 @@ def isConvergingTriangular(matrix, admissibleError):
 def QRFactorization(A):
     Q = A[:, 0]
     for i in range(1, A.shape[0]):
-        b = A[:, i] - projection(A[:, i], Q[:, i - 1])
+        b = A[:][i] - projection(A[:][i], Q[:][i - 1])
         np.append(Q, b, axis=1)
     R = np.matmul(np.transpose(Q), A)
     return Q, R
@@ -51,3 +51,20 @@ def QRFactorization(A):
 # vec1 projected on vec2
 def projection(vec1, vec2):
     return (np.dot(vec1, vec2) / np.dot(vec2, vec2)) * vec2
+
+
+def main():
+  matrix = [[1,2],[3,4]]
+
+  print("Matrix original: ")
+  print(matrix)
+  print(np.transpose(matrix))
+#   exit(0)
+  aux = customSVD([matrix])
+  print("Answer: ")
+  print(aux)
+  exit(0)
+
+
+if __name__ == "__main__":
+    main()
