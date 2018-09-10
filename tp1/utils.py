@@ -15,7 +15,8 @@ def customEigenCalc(matrix):
     Q, R = QRFactorization(matrix)
     eigvectors = Q
     A = np.matmul(R, Q)
-    while not isConvergingTriangular(A):
+    error = 0.00000000000000000001
+    while not isConvergingTriangular(A, error):
         Q, R = QRFactorization(A)
         A = np.matmul(R, Q)
         eigvectors = eigvectors * Q
@@ -43,7 +44,7 @@ def QRFactorization(A):
     Q = A[:, 0]
     for i in range(1, A.shape[0]):
         b = A[:][i] - projection(A[:][i], Q[:][i - 1])
-        np.append(Q, b, axis=1)
+        np.append(Q, b, 0) #esto aca era un 1
     R = np.matmul(np.transpose(Q), A)
     return Q, R
 
