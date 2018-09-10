@@ -20,7 +20,7 @@ def customEigenCalc(matrix):
     while not isConvergingTriangular(A, error):
         print(Q)
         Q, R = QRFactorization(A)
-        A = np.cross(R, Q)
+        A = np.dot(R, Q)
         eigvectors = eigvectors * Q
     return readEigenvalues(A), np.matrix(eigvectors)
 
