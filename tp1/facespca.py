@@ -10,6 +10,7 @@ from scipy import ndimage as im
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import svm
+from utils import customSVD
 
 mypath      = 'att_faces/'
 onlydirs    = [f for f in listdir(mypath) if isdir(join(mypath, f))]
@@ -53,7 +54,7 @@ for dire in onlydirs:
     per += 1
 
 
-    
+
 #CARA MEDIA
 meanimage = np.mean(images,0)
 fig, axes = plt.subplots(1,1)
@@ -65,7 +66,7 @@ images  = [images[k,:]-meanimage for k in range(images.shape[0])]
 imagetst= [imagetst[k,:]-meanimage for k in range(imagetst.shape[0])]
 
 #PCA
-U,S,V = np.linalg.svd(images,full_matrices = False) # Hacer inhouse
+V = customSVD(images) # Hacer inhouse
 
 #Primera autocara...
 eigen1 = (np.reshape(V[0,:],[versize,horsize]))*255
@@ -92,7 +93,7 @@ for neigen in range(1,nmax):
     #proyecto
     improy      = np.dot(images,np.transpose(B))
     imtstproy   = np.dot(imagetst,np.transpose(B))
-        
+
     #SVM
     #entreno
     clf = svm.LinearSVC()
