@@ -2,24 +2,14 @@ import numpy as np
 
 
 def customSVD(matrix):
-
     matrix = np.matrix(matrix)
-    print(matrix.shape)
     transposed = np.transpose(matrix)
-    auxMatrix = np.matmul(matrix, transposed)
-    # auxMatrix = np.matmul(transposed, matrix)
-    # print(auxMatrix.shape)
-    eigenvalues, eigenvectors = customEigenCalc(auxMatrix)
-    # print(eigenvalues)
-    # print(eigenvectors)
-    v = eigenvectors
-    u = np.empty(matrix.shape)
-    for i in range(0, u.shape[1]):
-        u[:, i] = np.reshape(np.matmul(np.transpose(matrix), v[:, i]) / np.sqrt(eigenvalues[i]), 3) # cambiar a lo q corresponda
-    v = np.matmul(np.transpose(matrix), u)
-    # print(v)
-    # print(u)
-    return v
+    aux_matrix = np.matmul(matrix, transposed)
+    eigenvalues, eigenvectors = customEigenCalc(aux_matrix)
+    eigenvectors = matrix.transpose() * eigenvectors
+    for i in range(0, matrix.shape[0]):
+        eigenvectors[:, i] = eigenvectors[:, i] / norm_2(eigenvectors[:, i])
+    return eigenvectors.transpose()
 
 
 def customEigenCalc(matrix):
@@ -81,8 +71,8 @@ def norm_2(vec):
 
 
 def main():
-    matrix = [1, 1], [1, 0], [0, 1]
-
+    matrix = [[0, 3, 1], [5, 9, 1], [1, 8, 3], [5, 6, 6]]
+    matrix = np.matrix(matrix).transpose()
     print("Matrix oridinal: ")
     # print(matrix)
     # print(np.transpose(matrix))
@@ -95,10 +85,8 @@ def main():
     #   aux = isConvergingTriangular([ [1, 1, 1],
     #                                  [0, 0, 1],
     #                                  [0, 0, 1]], 0.00001 )
-    print("Eigenvalues: " + str(aux[0]))
-    print("Eigenvectors: \n" + str(aux[1]))
-
-    caca = np.linalg.svd(matrix)
+    print("Eigenvalues: " + str(aux))
+    caca = np.linalg.svd(np.matrix(matrix), full_matrices=False)
     print(caca)
     exit(0)
 
