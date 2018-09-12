@@ -18,7 +18,7 @@ def customEigenCalc(matrix):
 
     A = np.matmul(R, Q)
     error = 0.00001
-    maxiterations = 1000
+    maxiterations = 200
     i = 0
     while i < maxiterations:
         Q, R = qr_decomposition(A)

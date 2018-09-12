@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 from sklearn import svm
 from utils import customSVD
 
-mypath      = 'att_faces/'
+mypath      = 'db/'
 onlydirs    = [f for f in listdir(mypath) if isdir(join(mypath, f))]
 
 #image size
@@ -21,7 +21,7 @@ versize     = 112
 areasize    = horsize*versize
 
 #number of figures
-personno    = 40
+personno    = 5
 trnperper   = 6
 tstperper   = 4
 trnno       = personno*trnperper
@@ -31,7 +31,7 @@ tstno       = personno*tstperper
 images = np.zeros([trnno,areasize])
 person = np.zeros([trnno,1])
 imno = 0
-per  = 0
+per  = 0    
 for dire in onlydirs:
     for k in range(1,trnperper+1):
         a = im.imread(mypath + dire + '/{}'.format(k) + '.pgm')/255.0
@@ -66,7 +66,8 @@ images  = [images[k,:]-meanimage for k in range(images.shape[0])]
 imagetst= [imagetst[k,:]-meanimage for k in range(imagetst.shape[0])]
 
 #PCA
-V = customSVD(images) # Hacer inhouse
+U, S, V = np.linalg.svd(images, full_matrices=False)
+# V = customSVD(images) # Hacer inhouse
 
 #Primera autocara...
 eigen1 = (np.reshape(V[0,:],[versize,horsize]))*255
