@@ -2,15 +2,23 @@ import numpy as np
 
 
 def customSVD(matrix):
-    v = []
 
     matrix = np.matrix(matrix)
     print(matrix.shape)
     transposed = np.transpose(matrix)
-    auxMatrix = np.matmul(transposed, matrix)
+    auxMatrix = np.matmul(matrix, transposed)
+    # auxMatrix = np.matmul(transposed, matrix)
     # print(auxMatrix.shape)
     eigenvalues, eigenvectors = customEigenCalc(auxMatrix)
-    v.append(eigenvectors)
+    # print(eigenvalues)
+    # print(eigenvectors)
+    v = eigenvectors
+    u = np.empty(matrix.shape)
+    for i in range(0, u.shape[1]):
+        u[:, i] = np.reshape(np.matmul(np.transpose(matrix), v[:, i]) / np.sqrt(eigenvalues[i]), 3) # cambiar a lo q corresponda
+    v = np.matmul(np.transpose(matrix), u)
+    # print(v)
+    # print(u)
     return v
 
 
@@ -23,7 +31,6 @@ def customEigenCalc(matrix):
     while not isConvergingTriangular(R, error):
         Q, R = qr_decomposition(A)
         A = np.matmul(R, Q)
-        # print('RQ: ' + str(A))
         eigvectors = np.matmul(eigvectors, Q)
     return readEigenvalues(R), np.matrix(eigvectors)
 
@@ -41,7 +48,6 @@ def readEigenvalues(A):
 
 # checks for lower triangles of val < admissibleError in matrix
 def isConvergingTriangular(matrix, admissibleError):
-    # print('es triangular: ' + str(matrix))
     for x in range(0, matrix.shape[0]):
         for y in range(0, matrix.shape[1]):
             if x != y and abs(matrix[x, y]) > admissibleError:
@@ -62,9 +68,9 @@ def qr_decomposition(matrix):
         else:
             Q = np.vstack((Q, a))
     Q = np.transpose(Q)
-    R = np.zeros((3, 3))
+    R = np.zeros(A.shape)
     for i in range(0, A.shape[0]):
-        for j in range(i, A.shape[0]):
+        for j in range(i, A.shape[1]):
             R[i, j] = np.dot(Q[:, i], A[:][j])
     return Q, R
 
@@ -75,7 +81,7 @@ def norm_2(vec):
 
 
 def main():
-    matrix = [1, 1, 0], [1, 0, 1], [0, 1, 1]
+    matrix = [1, 1], [1, 0], [0, 1]
 
     print("Matrix oridinal: ")
     # print(matrix)
@@ -84,12 +90,16 @@ def main():
     #   aux = customSVD([matrix])
     print(np.array(matrix))
     print('--')
-    aux = customEigenCalc(np.array(matrix))
+    aux = customSVD(np.array(matrix))
+
     #   aux = isConvergingTriangular([ [1, 1, 1],
     #                                  [0, 0, 1],
     #                                  [0, 0, 1]], 0.00001 )
     print("Eigenvalues: " + str(aux[0]))
     print("Eigenvectors: \n" + str(aux[1]))
+
+    caca = np.linalg.svd(matrix)
+    print(caca)
     exit(0)
 
 
