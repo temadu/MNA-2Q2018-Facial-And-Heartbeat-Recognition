@@ -4,7 +4,7 @@ import numpy as np
 def customSVD(matrix):
     v = []
 
-    matrix = calculate_hessenberg(np.matrix(matrix))
+    matrix = np.matrix(matrix)
     print(matrix.shape)
     transposed = np.transpose(matrix)
     auxMatrix = np.matmul(transposed, matrix)
@@ -62,7 +62,7 @@ def qr_decomposition(matrix):
         else:
             Q = np.vstack((Q, a))
     Q = np.transpose(Q)
-    R = np.zeros((3,3))
+    R = np.zeros((3, 3))
     for i in range(0, A.shape[0]):
         for j in range(i, A.shape[0]):
             R[i, j] = np.dot(Q[:, i], A[:][j])
@@ -72,7 +72,6 @@ def qr_decomposition(matrix):
 def norm_2(vec):
     vec = np.array(vec)
     return np.sqrt(sum([i ** 2 for i in vec]))
-
 
 
 def main():
