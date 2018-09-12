@@ -18,10 +18,13 @@ def customEigenCalc(matrix):
 
     A = np.matmul(R, Q)
     error = 0.00001
-    while not isConvergingTriangular(R, error):
+    maxiterations = 1000
+    i = 0
+    while i < maxiterations:
         Q, R = qr_decomposition(A)
         A = np.matmul(R, Q)
         eigvectors = np.matmul(eigvectors, Q)
+        i += 1
     return readEigenvalues(R), np.matrix(eigvectors)
 
 
