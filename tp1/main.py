@@ -38,7 +38,7 @@ def argumentParser():
     parser.add_argument(
         '-a',
         '--add',
-        help="Add a person to DB. If no --filepath is provided, it will try to use the camera.",
+        help="Add a person to DB. If no --imagepath is provided, it will try to use the camera.",
         action='store_true'
     )
 
@@ -75,10 +75,18 @@ def argumentParser():
     )
 
     parser.add_argument(
-        '--testImagesNum',
+        '--trainImagesNum',
         help="Number of training images per subject",
-        default=1,
+        default=7,
         dest='trainingImgPerSubject',
+        type=checkBetweenOneAndTen
+    )
+
+    parser.add_argument(
+        '--testImagesNum',
+        help="Number of testing images per subject",
+        default=3,
+        dest='testingImgPerSubject',
         type=checkBetweenOneAndTen
     )
 
@@ -90,9 +98,23 @@ def argumentParser():
     )
 
     parser.add_argument(
-        '--filepath',
-        help="Path of file to check\n\n"
+        '--dbpath',
+        help="Path to the database to use when querying.",
+        default='db/',
+        dest='dbPath'
     )
+
+    parser.add_argument(
+        '--imagepath',
+        help="Path of file to check"
+    )
+
+    parser.add_argument(
+        '--test',
+        help="Test flag to show graphics and check error\n\n",
+        action='store_true'
+    )
+
     return parser
 
 
@@ -111,23 +133,20 @@ def main():
     picturetaker.addPerson(parsedArgs.name)
   elif parsedArgs.query:
     print(parsedArgs)
-    imageToAnalizePath = parsedArgs.filepath
+    imageToAnalizePath = parsedArgs.imagepath
     if imageToAnalizePath == None:
       imageToAnalizePath = picturetaker.takeTempPic()
     # LEVANTAR LA IMAGEN
     imageToAnalize = facespca.im.imread(imageToAnalizePath)/255.0
-    print(imageToAnalize)
-    print("AFTER PCA")
-
     
     # HACER PCA O KPCA
     result = -1
     if(parsedArgs.method == 'pca'):
-        result = facespca.pca(imageToAnalize)
+        result = facespca.pca(imageToAnalize, parsedArgs.trainingImgPerSubject, parsedArgs.testingImgPerSubject, parsedArgs.dbPath)
     else:
         print("KPCA")
         result = -1
-    # PREGUNTAR PERSONA
+    # DEVOLVER
     print("You are person {}: {}".format(result,picturetaker.getPersonName(result)))
     
 
@@ -135,10 +154,6 @@ def main():
     picturetaker.deleteTempPic()
   else:
     parser.print_help()
-    
-  # check if image from file or picture
-
-
   
   exit(0)
 

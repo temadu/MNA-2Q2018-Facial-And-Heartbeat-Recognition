@@ -11,26 +11,28 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import svm
 from utils import customSVD
+from picturetaker import getLastInDB
 
-mypath      = 'db/'
-onlydirs    = [f for f in listdir(mypath) if isdir(join(mypath, f))]
+
 
 #image size
 horsize     = 92
 versize     = 112
 areasize    = horsize*versize
 
-#number of figures
-personno    = 5
-trnperper   = 6
-tstperper   = 4
-trnno       = personno*trnperper
-tstno       = personno*tstperper
+def pca(imageToAnalize, trainingImagesNum, testingImagesNum, dbPath):
 
-#TRAINING SET
+    mypath = dbPath
+    onlydirs = [f for f in listdir(mypath) if isdir(join(mypath, f))]
 
+    #number of figures
+    personno = getLastInDB()
+    trnperper = trainingImagesNum
+    tstperper = testingImagesNum
+    trnno = personno*trnperper
+    tstno = personno*tstperper
 
-def pca(imageToAnalize):
+    #TRAINING SET
     images = np.zeros([trnno,areasize])
     person = np.zeros([trnno,1])
     imno = 0
@@ -71,6 +73,7 @@ def pca(imageToAnalize):
     #PCA
     U, S, V = np.linalg.svd(images, full_matrices=False)
     # V = customSVD(images) # Hacer inhouse
+    # V = V*-1
 
     #Primera autocara...
     eigen1 = (np.reshape(V[0,:],[versize,horsize]))*255
@@ -90,10 +93,7 @@ def pca(imageToAnalize):
 
 
     nmax = V.shape[0]
-    print()
     accs = np.zeros([nmax,1])
-    print("NMAX")
-    print(nmax)
 
     # for neigen in range(1,nmax+1):
     #     print(neigen)
@@ -127,12 +127,10 @@ def pca(imageToAnalize):
     clf.fit(improy, person.ravel())
     # accs[neigen-1] = clf.score(imtstproy, persontst.ravel())
 
-    print(meanimage)
-
     imageToVector = np.reshape(imageToAnalize, 92 * 112)
     imageArray = np.array(imageToVector)
     diff = imageArray - meanimage
     test = np.dot([diff], np.transpose(V))
-    print(test)
+    # print(test)
 
     return int(clf.predict(test)[0]) + 1

@@ -186,7 +186,7 @@ def takePics():
     cv2.destroyAllWindows()
 
 def getLastInDB():
-    print(os.listdir('./db/'))
+    # print(os.listdir('./db/'))
     return int(functools.reduce(biggestDirReducer, os.listdir('./db/'))[1:])
 def biggestDirReducer(a,b):
     if(int(a[1:]) > int(b[1:])):
@@ -212,7 +212,10 @@ def removePerson(id):
         print("PERSON {} DOES NOT EXIST".format(id))
 
 def getPersonName(id):
-    f = open("./db/s{}/personInfo.txt".format(id), "r")
-    personName = f.readline()
-    f.close()
-    return personName
+    if os.path.exists("./db/s{}/personInfo.txt".format(id)):
+        f = open("./db/s{}/personInfo.txt".format(id), "r")
+        personName = f.readline()
+        f.close()
+        return personName
+    else:
+        return "NO NAME"
