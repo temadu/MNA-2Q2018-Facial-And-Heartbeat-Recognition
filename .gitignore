@@ -63,3 +63,4 @@ fabric.properties
 
 tp1/imageOutput/
 .vscode/
+tp1/__pycache__
