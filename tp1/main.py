@@ -142,7 +142,8 @@ def main():
     # HACER PCA O KPCA
     result = -1
     if(parsedArgs.method == 'pca'):
-        result = facespca.pca(imageToAnalize, parsedArgs.trainingImgPerSubject, parsedArgs.testingImgPerSubject, parsedArgs.dbPath)
+        result = facespca.pca(imageToAnalize, parsedArgs.trainingImgPerSubject,
+                              parsedArgs.testingImgPerSubject, parsedArgs.dbPath, parsedArgs.test)
     else:
         print("KPCA")
         result = -1

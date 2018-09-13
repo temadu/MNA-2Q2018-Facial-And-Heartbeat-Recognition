@@ -20,7 +20,7 @@ horsize     = 92
 versize     = 112
 areasize    = horsize*versize
 
-def pca(imageToAnalize, trainingImagesNum, testingImagesNum, dbPath):
+def pca(imageToAnalize, trainingImagesNum, testingImagesNum, dbPath, testFlag):
 
     mypath = dbPath
     onlydirs = [f for f in listdir(mypath) if isdir(join(mypath, f))]
@@ -62,9 +62,10 @@ def pca(imageToAnalize, trainingImagesNum, testingImagesNum, dbPath):
 
     #CARA MEDIA
     meanimage = np.mean(images,0)
-    # fig, axes = plt.subplots(1,1)
-    # axes.imshow(np.reshape(meanimage,[versize,horsize])*255,cmap='gray')
-    # fig.suptitle('Imagen media')
+    if(testFlag):
+        fig, axes = plt.subplots(1,1)
+        axes.imshow(np.reshape(meanimage,[versize,horsize])*255,cmap='gray')
+        fig.suptitle('Imagen media')
 
     #resto la media
     images  = [images[k,:]-meanimage for k in range(images.shape[0])]
@@ -77,50 +78,52 @@ def pca(imageToAnalize, trainingImagesNum, testingImagesNum, dbPath):
 
     #Primera autocara...
     eigen1 = (np.reshape(V[0,:],[versize,horsize]))*255
-    # fig, axes = plt.subplots(1,1)
-    # axes.imshow(eigen1,cmap='gray')
-    # fig.suptitle('Primera autocara')
+    if(testFlag):
+        fig, axes = plt.subplots(1,1)
+        axes.imshow(eigen1,cmap='gray')
+        fig.suptitle('Primera autocara')
 
     eigen2 = (np.reshape(V[1,:],[versize,horsize]))*255
-    # fig, axes = plt.subplots(1,1)
-    # axes.imshow(eigen2,cmap='gray')
-    # fig.suptitle('Segunda autocara')
+    if(testFlag):
+        fig, axes = plt.subplots(1,1)
+        axes.imshow(eigen2,cmap='gray')
+        fig.suptitle('Segunda autocara')
 
     eigen3 = (np.reshape(V[2,:],[versize,horsize]))*255
-    # fig, axes = plt.subplots(1,1)
-    # axes.imshow(eigen2,cmap='gray')
-    # fig.suptitle('Tercera autocara')
+    if(testFlag):
+        fig, axes = plt.subplots(1,1)
+        axes.imshow(eigen2,cmap='gray')
+        fig.suptitle('Tercera autocara')
 
 
     nmax = V.shape[0]
     accs = np.zeros([nmax,1])
 
-    # for neigen in range(1,nmax+1):
-    #     print(neigen)
-    #     #Me quedo sólo con las primeras autocaras
-    #     B = V[0:neigen,:]
-    #     #proyecto
-    #     improy      = np.dot(images,np.transpose(B))
-    #     imtstproy   = np.dot(imagetst,np.transpose(B))
+    if(testFlag):
+        for neigen in range(1,nmax+1):
+            print(neigen)
+            #Me quedo sólo con las primeras autocaras
+            B = V[0:neigen,:]
+            #proyecto
+            improy      = np.dot(images,np.transpose(B))
+            imtstproy   = np.dot(imagetst,np.transpose(B))
 
-    #     #SVM
-    #     #entreno
-    #     clf = svm.LinearSVC()
-    #     clf.fit(improy,person.ravel())
-    #     accs[neigen-1] = clf.score(imtstproy,persontst.ravel())
-    #     print('Precisión con {0} autocaras: {1} %\n'.format(neigen,accs[neigen-1]*100))
-
-    # fig, axes = plt.subplots(1,1)
-    # axes.semilogy(range(nmax),(1-accs)*100)
-    # axes.set_xlabel('No. autocaras')
-    # axes.grid(which='Both')
-    # fig.suptitle('Error')
-
-    # plt.show()
+            #SVM
+            #entreno
+            clf = svm.LinearSVC()
+            clf.fit(improy,person.ravel())
+            accs[neigen-1] = clf.score(imtstproy,persontst.ravel())
+            print('Precisión con {0} autocaras: {1} %\n'.format(neigen,accs[neigen-1]*100))
+    
+    if(testFlag):
+        fig, axes = plt.subplots(1,1)
+        axes.semilogy(range(nmax),(1-accs)*100)
+        axes.set_xlabel('No. autocaras')
+        axes.grid(which='Both')
+        fig.suptitle('Error')
+        plt.show()
 
     improy = np.dot(images, np.transpose(V))
-    # imtstproy = np.dot(imagetst, np.transpose(B))
-
     #SVM
     #entreno
     clf = svm.LinearSVC()
