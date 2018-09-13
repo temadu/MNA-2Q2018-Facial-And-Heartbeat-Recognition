@@ -36,7 +36,7 @@ def readEigenvalues(A):
         if abs(eigenvalue) <= error:
             eigenvalue = 0
         eigenvalues.append(eigenvalue)
-    return eigenvalues
+    return np.array(eigenvalues)
 
 
 # checks for lower triangles of val < admissibleError in matrix
