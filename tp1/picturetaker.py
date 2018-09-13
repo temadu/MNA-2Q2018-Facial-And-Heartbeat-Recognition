@@ -29,12 +29,13 @@ def takeTempPic():
             x1 = math.floor(len(newimg[0])/2-92/2)
             x2 = math.floor(len(newimg[0])/2+92/2)
             crop = newimg[y1:y2, x1:x2]
-            cv2.imshow("Croper", newimg[y1:y2, x1:x2])
+            cv2.imshow("Croper", crop)
             if not ret:
                 break
             k = cv2.waitKey(1)
             if k % 256 == 32:
                 # SPACE pressed
+                print(crop)
                 img_name = "./picTaken.pgm"
                 cv2.imwrite("tempFile.pgm", crop)
                 with open("tempFile.pgm", 'rb') as f:

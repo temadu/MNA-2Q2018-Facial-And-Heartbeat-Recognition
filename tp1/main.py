@@ -2,6 +2,7 @@ import argparse
 from argparse import RawTextHelpFormatter
 import picturetaker
 import os
+import facespca
 
 WEBCAM_ON = False
 
@@ -113,8 +114,25 @@ def main():
     imageToAnalizePath = parsedArgs.filepath
     if imageToAnalizePath == None:
       imageToAnalizePath = picturetaker.takeTempPic()
-    picturetaker.deleteTempPic()
+    # LEVANTAR LA IMAGEN
+    imageToAnalize = facespca.im.imread(imageToAnalizePath)/255.0
+    print(imageToAnalize)
+    result = facespca.pca(imageToAnalize)
+    print("AFTER PCA")
+    print(result)
+
     
+    # HACER PCA O KPCA
+    if(parsedArgs.method == 'pca'):
+        print("PCA")
+
+    else:
+        print("KPCA")
+    # PREGUNTAR PERSONA
+
+
+    # LIMPIAR
+    picturetaker.deleteTempPic()
   else:
     parser.print_help()
     
