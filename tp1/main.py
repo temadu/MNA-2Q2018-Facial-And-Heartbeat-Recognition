@@ -117,19 +117,19 @@ def main():
     # LEVANTAR LA IMAGEN
     imageToAnalize = facespca.im.imread(imageToAnalizePath)/255.0
     print(imageToAnalize)
-    result = facespca.pca(imageToAnalize)
     print("AFTER PCA")
-    print(result)
 
     
     # HACER PCA O KPCA
+    result = -1
     if(parsedArgs.method == 'pca'):
-        print("PCA")
-
+        result = facespca.pca(imageToAnalize)
     else:
         print("KPCA")
+        result = -1
     # PREGUNTAR PERSONA
-
+    print("You are person {}: {}".format(result,picturetaker.getPersonName(result)))
+    
 
     # LIMPIAR
     picturetaker.deleteTempPic()

@@ -94,20 +94,21 @@ def pca(imageToAnalize):
     accs = np.zeros([nmax,1])
     print("NMAX")
     print(nmax)
-    for neigen in range(1,nmax+1):
-        print(neigen)
-        #Me quedo sólo con las primeras autocaras
-        B = V[0:neigen,:]
-        #proyecto
-        improy      = np.dot(images,np.transpose(B))
-        imtstproy   = np.dot(imagetst,np.transpose(B))
 
-        #SVM
-        #entreno
-        clf = svm.LinearSVC()
-        clf.fit(improy,person.ravel())
-        accs[neigen-1] = clf.score(imtstproy,persontst.ravel())
-        print('Precisión con {0} autocaras: {1} %\n'.format(neigen,accs[neigen-1]*100))
+    # for neigen in range(1,nmax+1):
+    #     print(neigen)
+    #     #Me quedo sólo con las primeras autocaras
+    #     B = V[0:neigen,:]
+    #     #proyecto
+    #     improy      = np.dot(images,np.transpose(B))
+    #     imtstproy   = np.dot(imagetst,np.transpose(B))
+
+    #     #SVM
+    #     #entreno
+    #     clf = svm.LinearSVC()
+    #     clf.fit(improy,person.ravel())
+    #     accs[neigen-1] = clf.score(imtstproy,persontst.ravel())
+    #     print('Precisión con {0} autocaras: {1} %\n'.format(neigen,accs[neigen-1]*100))
 
     # fig, axes = plt.subplots(1,1)
     # axes.semilogy(range(nmax),(1-accs)*100)
@@ -117,12 +118,21 @@ def pca(imageToAnalize):
 
     # plt.show()
 
+    improy = np.dot(images, np.transpose(V))
+    # imtstproy = np.dot(imagetst, np.transpose(B))
+
+    #SVM
+    #entreno
+    clf = svm.LinearSVC()
+    clf.fit(improy, person.ravel())
+    # accs[neigen-1] = clf.score(imtstproy, persontst.ravel())
+
     print(meanimage)
 
-    imageToVector = (np.reshape(imageToAnalize, 92 * 112).astype(np.uint8) - 127.5) / 127.5
+    imageToVector = np.reshape(imageToAnalize, 92 * 112)
     imageArray = np.array(imageToVector)
     diff = imageArray - meanimage
     test = np.dot([diff], np.transpose(V))
     print(test)
 
-    return clf.predict(test)
+    return int(clf.predict(test)[0]) + 1
