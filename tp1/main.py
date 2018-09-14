@@ -3,6 +3,7 @@ from argparse import RawTextHelpFormatter
 import picturetaker
 import os
 import facespca
+import time
 
 WEBCAM_ON = False
 
@@ -141,6 +142,8 @@ def main():
     
     # HACER PCA O KPCA
     result = -1
+
+    start = time.time()
     if(parsedArgs.method == 'pca'):
         result = facespca.pca(imageToAnalize, parsedArgs.trainingImgPerSubject,
                               parsedArgs.testingImgPerSubject, parsedArgs.dbPath, parsedArgs.test)
@@ -149,6 +152,8 @@ def main():
         result = -1
     # DEVOLVER
     print("You are person {}: {}".format(result,picturetaker.getPersonName(result)))
+    end = time.time()
+    print("Estimated processing time:{}".format(end - start))
     
 
     # LIMPIAR

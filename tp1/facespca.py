@@ -72,18 +72,11 @@ def pca(imageToAnalize, trainingImagesNum, testingImagesNum, dbPath, testFlag):
     imagetst= [imagetst[k,:]-meanimage for k in range(imagetst.shape[0])]
 
 
-    if(testFlag):
-        import time
-        start = time.time()
-
     #PCA
     # U, S, V = np.linalg.svd(images, full_matrices=False)
     V = customSVD(images) # Hacer inhouse
     V = V*-1
 
-    if(testFlag):
-        end = time.time()
-        print(end - start)
 
     #Primera autocara...
     eigen1 = (np.reshape(V[0,:],[versize,horsize]))*255
