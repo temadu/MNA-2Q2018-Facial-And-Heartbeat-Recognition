@@ -24,9 +24,9 @@ def checkBetweenOneAndTen(value):
     return ivalue
 
 def argumentParser():
-    parser = argparse.ArgumentParser(description='This program checks if a person is an enemy of the state.\n'
-                                                 'You can add or remove a person from the DB and then use magic to check if he exists in it by using the webcam.\n'
-                                                 'LONG LIVE TRUMPERINO!', formatter_class=RawTextHelpFormatter)
+    parser = argparse.ArgumentParser(description='This program checks if a person in the database by using facial recognition.\n'
+                                                 'You can add or remove a person from the DB and then use the webcam to recognize them.\n'
+                                                 , formatter_class=RawTextHelpFormatter)
 
     # LIST PERSONS IN DB
     parser.add_argument(
