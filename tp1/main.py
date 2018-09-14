@@ -125,7 +125,6 @@ def main():
   # get parser
   parser = argumentParser()
   parsedArgs = parser.parse_args()
-  print(parsedArgs)
   picturetaker.setDBDir(parsedArgs.dbPath)
 
   if parsedArgs.list:
@@ -136,7 +135,7 @@ def main():
   elif parsedArgs.add:
     picturetaker.addPerson(parsedArgs.name)
   elif parsedArgs.query:
-    print(parsedArgs)
+    # print(parsedArgs)
     imageToAnalizePath = parsedArgs.imagepath
     if imageToAnalizePath == None:
       imageToAnalizePath = picturetaker.takeTempPic()
@@ -145,7 +144,6 @@ def main():
     
     # HACER PCA O KPCA
     result = -1
-
     start = time.time()
     if(parsedArgs.method == 'pca'):
         result = facespca.pca(imageToAnalize, parsedArgs.trainingImgPerSubject,

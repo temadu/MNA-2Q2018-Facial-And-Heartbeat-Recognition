@@ -118,8 +118,9 @@ def pca(imageToAnalize, trainingImagesNum, testingImagesNum, dbPath, testFlag):
             print('Precisión con {0} autocaras: {1} %\n'.format(neigen,accs[neigen-1]*100))
         
         fig, axes = plt.subplots(1,1)
-        axes.semilogx(range(nmax),(1-accs)*100)
+        axes.plot(range(nmax),(1-accs)*100)
         axes.set_xlabel('No. autocaras')
+        axes.set_ylabel('%error')
         axes.grid(which='Both')
         fig.suptitle('Error')
         plt.show()

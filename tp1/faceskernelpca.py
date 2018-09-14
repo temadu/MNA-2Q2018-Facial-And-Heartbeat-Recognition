@@ -32,9 +32,6 @@ def kpca(imageToAnalize, trainingImagesNum, testingImagesNum, dbPath, testFlag):
     tstperper = testingImagesNum
     trnno = personno*trnperper
     tstno = personno*tstperper
-    print(personno)
-    print(trnno)
-    print(tstno)
 
     # TRAINING SET
     images = np.zeros([trnno, areasize])
@@ -104,8 +101,6 @@ def kpca(imageToAnalize, trainingImagesNum, testingImagesNum, dbPath, testFlag):
             # Me quedo sólo con las primeras autocaras
             # proyecto
             improy = improypre[:, 0:neigen]
-            if(neigen == nmax):
-                print("NMAX")
             imtstproy = imtstproypre[:, 0:neigen]
 
             # SVM
@@ -116,8 +111,9 @@ def kpca(imageToAnalize, trainingImagesNum, testingImagesNum, dbPath, testFlag):
             print('Precisión con {0} autocaras: {1} %\n'.format(neigen, accs[neigen-1] * 100))
 
         fig, axes = plt.subplots(1, 1)
-        axes.semilogy(range(nmax), (1 - accs) * 100)
+        axes.plot(range(nmax), (1 - accs) * 100)
         axes.set_xlabel('No. autocaras')
+        axes.set_ylabel('%error')
         axes.grid(which='Both')
         fig.suptitle('Error')
         plt.show()

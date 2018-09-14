@@ -193,7 +193,7 @@ def setDBDir(newDir):
 
 def getLastInDB():
     # print(os.listdir('./db/'))
-    return int(functools.reduce(biggestDirReducer, os.listdir(DBDir))[1:])
+    return int(functools.reduce(biggestDirReducer, [f for f in os.listdir(DBDir) if os.path.isdir(os.path.join(DBDir, f))])[1:])
 def biggestDirReducer(a,b):
     if(int(a[1:]) > int(b[1:])):
         return a
