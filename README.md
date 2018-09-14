@@ -8,6 +8,7 @@ Python libraries required:
 - sklearn
 - scipy
 - opencv-python
+
 install them using $ pip install [library-name]
 
 ```
