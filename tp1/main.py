@@ -3,6 +3,7 @@ from argparse import RawTextHelpFormatter
 import picturetaker
 import os
 import facespca
+import faceskernelpca
 import time
 
 WEBCAM_ON = False
@@ -124,6 +125,8 @@ def main():
   # get parser
   parser = argumentParser()
   parsedArgs = parser.parse_args()
+  print(parsedArgs)
+  picturetaker.setDBDir(parsedArgs.dbPath)
 
   if parsedArgs.list:
     picturetaker.listDB()
@@ -148,8 +151,8 @@ def main():
         result = facespca.pca(imageToAnalize, parsedArgs.trainingImgPerSubject,
                               parsedArgs.testingImgPerSubject, parsedArgs.dbPath, parsedArgs.test)
     else:
-        print("KPCA")
-        result = -1
+        result = faceskernelpca.kpca(imageToAnalize, parsedArgs.trainingImgPerSubject,
+                                     parsedArgs.testingImgPerSubject, parsedArgs.dbPath, parsedArgs.test)
     # DEVOLVER
     print("You are person {}: {}".format(result,picturetaker.getPersonName(result)))
     end = time.time()

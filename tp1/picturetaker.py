@@ -113,7 +113,7 @@ def addPerson(name):
     fo.write(name)
     fo.close()
     
-    for i in range(1,imagesToTakeNum):
+    for i in range(1,imagesToTakeNum+1):
         img_name = "./db/s{}/{}.pgm".format(newPersonID, i)
         cv2.imwrite("tempFile.pgm", imagesToSave[i-1])
         # Remove opencv generated comment
@@ -185,22 +185,32 @@ def takePics():
     cam.release()
     cv2.destroyAllWindows()
 
+
+DBDir = './db/'
+def setDBDir(newDir):
+    global DBDir
+    DBDir = newDir
+
 def getLastInDB():
     # print(os.listdir('./db/'))
-    return int(functools.reduce(biggestDirReducer, os.listdir('./db/'))[1:])
+    return int(functools.reduce(biggestDirReducer, os.listdir(DBDir))[1:])
 def biggestDirReducer(a,b):
     if(int(a[1:]) > int(b[1:])):
         return a
     return b
 
 def listDB():
-    persons = [x for x in os.listdir('./db/') if os.path.isdir('./db/' + x)]
+    print(DBDir)
+    persons = [x for x in os.listdir(DBDir) if os.path.isdir(DBDir + x)]
     persons.sort(key=dirSorter)
     print("LISTING PEOPLE IN DB")
     for dir in persons:
-        f = open('./db/' + dir + "/personInfo.txt", "r")
-        personName = f.readline()
-        f.close()
+        if os.path.exists(DBDir + dir + "/personInfo.txt"):
+            f = open(DBDir + dir + "/personInfo.txt", "r")
+            personName = f.readline()
+            f.close()
+        else:
+            personName = "NO NAME"
         print('{}: {}'.format(dir[1:],personName))
 def dirSorter(e):
     return int(e[1:])

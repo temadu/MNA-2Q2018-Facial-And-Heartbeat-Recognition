@@ -116,8 +116,7 @@ def pca(imageToAnalize, trainingImagesNum, testingImagesNum, dbPath, testFlag):
             clf.fit(improy,person.ravel())
             accs[neigen-1] = clf.score(imtstproy,persontst.ravel())
             print('Precisión con {0} autocaras: {1} %\n'.format(neigen,accs[neigen-1]*100))
-    
-    if(testFlag):
+        
         fig, axes = plt.subplots(1,1)
         axes.semilogx(range(nmax),(1-accs)*100)
         axes.set_xlabel('No. autocaras')
@@ -134,8 +133,8 @@ def pca(imageToAnalize, trainingImagesNum, testingImagesNum, dbPath, testFlag):
 
     imageToVector = np.reshape(imageToAnalize, 92 * 112)
     imageArray = np.array(imageToVector)
-    diff = imageArray - meanimage
-    test = np.dot([diff], np.transpose(V))
+    d = imageArray - meanimage
+    p = np.dot([d], np.transpose(V))
     # print(test)
 
-    return int(clf.predict(test)[0]) + 1
+    return int(clf.predict(p)[0]) + 1
