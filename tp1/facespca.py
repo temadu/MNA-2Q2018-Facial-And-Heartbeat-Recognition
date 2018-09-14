@@ -71,10 +71,19 @@ def pca(imageToAnalize, trainingImagesNum, testingImagesNum, dbPath, testFlag):
     images  = [images[k,:]-meanimage for k in range(images.shape[0])]
     imagetst= [imagetst[k,:]-meanimage for k in range(imagetst.shape[0])]
 
+
+    if(testFlag):
+        import time
+        start = time.time()
+
     #PCA
-    U, S, V = np.linalg.svd(images, full_matrices=False)
-    # V = customSVD(images) # Hacer inhouse
-    # V = V*-1
+    # U, S, V = np.linalg.svd(images, full_matrices=False)
+    V = customSVD(images) # Hacer inhouse
+    V = V*-1
+
+    if(testFlag):
+        end = time.time()
+        print(end - start)
 
     #Primera autocara...
     eigen1 = (np.reshape(V[0,:],[versize,horsize]))*255
@@ -117,7 +126,7 @@ def pca(imageToAnalize, trainingImagesNum, testingImagesNum, dbPath, testFlag):
     
     if(testFlag):
         fig, axes = plt.subplots(1,1)
-        axes.semilogy(range(nmax),(1-accs)*100)
+        axes.semilogx(range(nmax),(1-accs)*100)
         axes.set_xlabel('No. autocaras')
         axes.grid(which='Both')
         fig.suptitle('Error')
