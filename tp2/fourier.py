@@ -7,7 +7,7 @@ import math
 
 def fft(x):
     N = len(x)
-    if N == 1:
+    if N <= 1:
         return x
     oddItems = fft(x[1::2])
     evenItems = fft(x[0::2])
