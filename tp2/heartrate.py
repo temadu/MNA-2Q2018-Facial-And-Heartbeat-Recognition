@@ -8,69 +8,71 @@ Created on Sat Sep 16 19:23:10 2017
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
-import tp2.fourier as fourier
+import fourier as fourier
 
-cap = cv2.VideoCapture('2017-09-14 21.53.59.mp4')
-# cap = cv2.VideoCapture('toti.mp4')
 
-# if not cap.isOpened():
-#    print("No lo pude abrir")
-#    return
+def analyze(videoPath):
+    cap = cv2.VideoCapture(videoPath)
+    # cap = cv2.VideoCapture('toti.mp4')
 
-length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-fps = cap.get(cv2.CAP_PROP_FPS)
-print(length)
-print(width)
-print(height)
-print(fps)
+    # if not cap.isOpened():
+    #    print("No lo pude abrir")
+    #    return
 
-r = np.zeros((1, length))
-g = np.zeros((1, length))
-b = np.zeros((1, length))
+    length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    print(length)
+    print(width)
+    print(height)
+    print(fps)
 
-k = 0
-while cap.isOpened():
-    ret, frame = cap.read()
+    r = np.zeros((1, length))
+    g = np.zeros((1, length))
+    b = np.zeros((1, length))
 
-    if ret:
-        r[0, k] = np.mean(frame[330:360, 610:640, 0])
-        g[0, k] = np.mean(frame[330:360, 610:640, 1])
-        b[0, k] = np.mean(frame[330:360, 610:640, 2])
-    #        print(k)
-    else:
-        break
-    k = k + 1
+    k = 0
+    while cap.isOpened():
+        ret, frame = cap.read()
 
-cap.release()
-cv2.destroyAllWindows()
+        if ret:
+            r[0, k] = np.mean(frame[330:360, 610:640, 0])
+            g[0, k] = np.mean(frame[330:360, 610:640, 1])
+            b[0, k] = np.mean(frame[330:360, 610:640, 2])
+        #        print(k)
+        else:
+            break
+        k = k + 1
 
-n = 1024
-f = np.linspace(-n / 2, n / 2 - 1, n) * fps / n
+    cap.release()
+    cv2.destroyAllWindows()
 
-r = r[0, 0:n] - np.mean(r[0, 0:n])
-g = g[0, 0:n] - np.mean(g[0, 0:n])
-b = b[0, 0:n] - np.mean(b[0, 0:n])
-print(len(r))
-print(len(g))
-print(len(b))
+    n = int(np.power(2, np.floor(np.log2(length))))
+    f = np.linspace(-n / 2, n / 2 - 1, n) * fps / n
 
-# np.fft.fft(b))
-R = np.abs(np.fft.fftshift(fourier.fft(r))) ** 2
-G = np.abs(np.fft.fftshift(fourier.fft(g))) ** 2
-B = np.abs(np.fft.fftshift(fourier.fft(b))) ** 2
+    r = r[0, 0:n] - np.mean(r[0, 0:n])
+    g = g[0, 0:n] - np.mean(g[0, 0:n])
+    b = b[0, 0:n] - np.mean(b[0, 0:n])
+    print(len(r))
+    print(len(g))
+    print(len(b))
 
-plt.plot(30 * f, R)
-plt.xlim(0, 200)
+    # np.fft.fft(b))
+    R = np.abs(np.fft.fftshift(fourier.fft(r))) ** 2
+    G = np.abs(np.fft.fftshift(fourier.fft(g))) ** 2
+    B = np.abs(np.fft.fftshift(fourier.fft(b))) ** 2
 
-plt.plot(30 * f, G)
-plt.xlim(0, 200)
-plt.xlabel("frecuencia [1/minuto]")
+    plt.plot(30 * f, R)
+    plt.xlim(0, 200)
 
-plt.plot(30 * f, B)
-plt.xlim(0, 200)
+    plt.plot(30 * f, G)
+    plt.xlim(0, 200)
+    plt.xlabel("frecuencia [1/minuto]")
 
-print("Frecuencia cardíaca G: ", abs(f[np.argmax(G)]) * 60, " pulsaciones por minuto")
-print("Frecuencia cardíaca B: ", abs(f[np.argmax(B)]) * 60, " pulsaciones por minuto")
-print("Frecuencia cardíaca R: ", abs(f[np.argmax(R)]) * 60, " pulsaciones por minuto")
+    plt.plot(30 * f, B)
+    plt.xlim(0, 200)
+    
+    print("Frecuencia cardíaca G: ", abs(f[np.argmax(G)]) * 60, " pulsaciones por minuto")
+    print("Frecuencia cardíaca B: ", abs(f[np.argmax(B)]) * 60, " pulsaciones por minuto")
+    print("Frecuencia cardíaca R: ", abs(f[np.argmax(R)]) * 60, " pulsaciones por minuto")
