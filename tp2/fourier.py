@@ -2,6 +2,7 @@
 
 from cmath import exp, pi
 import numpy as np
+import math
 
 def fft(x):
     N = len(x)
@@ -9,7 +10,7 @@ def fft(x):
         return x
     oddItems = fft(x[1::2])
     evenItems = fft(x[0::2])
-    rangeToUse = range(N//2)
+    rangeToUse = range(math.trunc(N/2))
     T = [exp(-2j * pi * k/N) * oddItems[k] for k in rangeToUse]
     return np.concatenate([evenItems[k] + T[k] for k in rangeToUse], [evenItems[k] - T[k] for k in rangeToUse])
 
