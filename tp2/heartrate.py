@@ -46,7 +46,7 @@ while cap.isOpened():
 cap.release()
 cv2.destroyAllWindows()
 
-n = 512
+n = 1024
 f = np.linspace(-n / 2, n / 2 - 1, n) * fps / n
 
 r = r[0, 0:n] - np.mean(r[0, 0:n])
@@ -71,4 +71,6 @@ plt.xlabel("frecuencia [1/minuto]")
 plt.plot(30 * f, B)
 plt.xlim(0, 200)
 
-print("Frecuencia cardíaca: ", abs(f[np.argmax(G)]) * 60, " pulsaciones por minuto")
+print("Frecuencia cardíaca G: ", abs(f[np.argmax(G)]) * 60, " pulsaciones por minuto")
+print("Frecuencia cardíaca B: ", abs(f[np.argmax(B)]) * 60, " pulsaciones por minuto")
+print("Frecuencia cardíaca R: ", abs(f[np.argmax(R)]) * 60, " pulsaciones por minuto")
