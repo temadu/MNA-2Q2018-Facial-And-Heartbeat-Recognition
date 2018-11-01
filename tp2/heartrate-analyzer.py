@@ -15,11 +15,11 @@ def checkPositive(value):
     return ivalue
 
 
-def checkBetweenOneAndTen(value):
+def checkBetweenTenAndTwoHundred(value):
     ivalue = int(value)
-    if ivalue <= 0 or ivalue > 10:
+    if ivalue < 10  or ivalue > 200:
          raise argparse.ArgumentTypeError(
-             "%s is an invalid int value. Must be between 1 and 10" % value)
+             "%s is an invalid int value. Must be between 10 and 200" % value)
     return ivalue
 
 
@@ -28,11 +28,17 @@ def argumentParser():
                                                  , formatter_class=RawTextHelpFormatter)
 
     parser.add_argument(
-        '--samplesNum',
-        help="Number images per subject",
-        default=10,
-        dest='imgPerSubject',
-        type=checkBetweenOneAndTen
+        '--minFilter',
+        help="Filter min",
+        type=checkBetweenTenAndTwoHundred
+    )
+
+
+    parser.add_argument(
+        '--maxFilter',
+        help="Filter max",
+        default=200,
+        type=checkBetweenTenAndTwoHundred
     )
 
     parser.add_argument(
@@ -59,7 +65,7 @@ def main():
       isTest = True
 
   if parsedArgs.videoPath:
-    heartrate.analyze(parsedArgs.videoPath, isTest)
+    heartrate.analyze(parsedArgs.videoPath, isTest, parsedArgs.minFilter, parsedArgs.maxFilter)
     end = time.time()
     print("Estimated processing time:{}".format(end - start))
 

@@ -11,7 +11,7 @@ import cv2
 import fourier as fourier
 
 
-def analyze(videoPath, isTest):
+def analyze(videoPath, isTest, minFilter, maxFilter):
     cap = cv2.VideoCapture(videoPath)
     # cap = cv2.VideoCapture('toti.mp4')
 
@@ -58,9 +58,10 @@ def analyze(videoPath, isTest):
     print(len(g))
     print(len(b))
 
-    r = fourier.butter_bandpass_filter(r, 40, 170, fps * 60)
-    g = fourier.butter_bandpass_filter(g, 40, 170, fps * 60)
-    b = fourier.butter_bandpass_filter(b, 40, 170, fps * 60)
+    if(minFilter and maxFilter):
+        r = fourier.butter_bandpass_filter(r, minFilter, maxFilter, fps * 60)
+        g = fourier.butter_bandpass_filter(g, minFilter, maxFilter, fps * 60)
+        b = fourier.butter_bandpass_filter(b, minFilter, maxFilter, fps * 60)
 
 
     # np.fft.fft(b))
