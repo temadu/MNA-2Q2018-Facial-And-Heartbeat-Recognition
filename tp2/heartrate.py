@@ -58,21 +58,27 @@ def analyze(videoPath):
     print(len(g))
     print(len(b))
 
+    r = fourier.butter_bandpass_filter(r, 40, 170, fps * 60)
+    g = fourier.butter_bandpass_filter(g, 40, 170, fps * 60)
+    b = fourier.butter_bandpass_filter(b, 40, 170, fps * 60)
+
+
     # np.fft.fft(b))
     R = np.abs(np.fft.fftshift(fourier.fft(r))) ** 2
     G = np.abs(np.fft.fftshift(fourier.fft(g))) ** 2
     B = np.abs(np.fft.fftshift(fourier.fft(b))) ** 2
 
     plt.plot(30 * f, R)
-    plt.xlim(0, 200)
+    plt.xlim(0, 150)
 
     plt.plot(30 * f, G)
-    plt.xlim(0, 200)
+    plt.xlim(0, 150)
     plt.xlabel("frecuencia [1/minuto]")
 
     plt.plot(30 * f, B)
-    plt.xlim(0, 200)
-    
-    print("Frecuencia cardíaca G: ", abs(f[np.argmax(G)]) * 60, " pulsaciones por minuto")
-    print("Frecuencia cardíaca B: ", abs(f[np.argmax(B)]) * 60, " pulsaciones por minuto")
-    print("Frecuencia cardíaca R: ", abs(f[np.argmax(R)]) * 60, " pulsaciones por minuto")
+    plt.xlim(0, 150)
+    plt.show()
+
+    print("Frecuencia cardiaca G: ", abs(f[np.argmax(G)]) * 60, " pulsaciones por minuto")
+    print("Frecuencia cardiaca B: ", abs(f[np.argmax(B)]) * 60, " pulsaciones por minuto")
+    print("Frecuencia cardiaca R: ", abs(f[np.argmax(R)]) * 60, " pulsaciones por minuto")

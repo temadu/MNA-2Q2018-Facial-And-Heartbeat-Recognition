@@ -3,6 +3,7 @@
 from cmath import exp, pi
 import numpy as np
 import math
+from scipy import signal
 
 
 def fft(x):
@@ -21,13 +22,16 @@ def fft(x):
         R.append(evenItems[k] - T)
     return L + R
 
-# def fft(x):
-#     N = len(x)
-#     if N <= 1:
-#         return x
-#     even = fft(x[0::2])
-#     odd = fft(x[1::2])
+# Referencing filter from https://scipy.github.io/old-wiki/pages/Cookbook/ButterworthBandpass
+def butter_bandpass(lowcut, highcut, fs, order=5):
+    nyq = 0.5 * fs
+    low = lowcut / nyq
+    high = highcut / nyq
+    b, a = signal.butter(order, [low, high], btype='band')
+    return b, a
 
-#     T = [exp(-2j * pi * k/N) * odd[k] for k in range(N//2)]
 
-#     return [even[k] + T[k] for k in range(N//2)] + [even[k] - T[k] for k in range(N//2)]
+def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
+    b, a = butter_bandpass(lowcut, highcut, fs, order=order)
+    y = signal.lfilter(b, a, data)
+    return y
