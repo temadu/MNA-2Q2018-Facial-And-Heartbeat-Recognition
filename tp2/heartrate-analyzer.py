@@ -54,9 +54,12 @@ def main():
   parser = argumentParser()
   parsedArgs = parser.parse_args()
   start = time.time()
+  isTest = False
+  if parsedArgs.test:
+      isTest = True
 
   if parsedArgs.videoPath:
-    heartrate.analyze(parsedArgs.videoPath)
+    heartrate.analyze(parsedArgs.videoPath, isTest)
     end = time.time()
     print("Estimated processing time:{}".format(end - start))
 

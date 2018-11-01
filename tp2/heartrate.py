@@ -11,7 +11,7 @@ import cv2
 import fourier as fourier
 
 
-def analyze(videoPath):
+def analyze(videoPath, isTest):
     cap = cv2.VideoCapture(videoPath)
     # cap = cv2.VideoCapture('toti.mp4')
 
@@ -68,17 +68,18 @@ def analyze(videoPath):
     G = np.abs(np.fft.fftshift(fourier.fft(g))) ** 2
     B = np.abs(np.fft.fftshift(fourier.fft(b))) ** 2
 
-    plt.plot(30 * f, R)
-    plt.xlim(0, 150)
+    if isTest:
+        plt.plot(60 * f, R)
+        plt.xlim(0, 150)
 
-    plt.plot(30 * f, G)
-    plt.xlim(0, 150)
-    plt.xlabel("frecuencia [1/minuto]")
+        plt.plot(60 * f, G)
+        plt.xlim(0, 150)
+        plt.xlabel("frecuencia [1/minuto]")
 
-    plt.plot(30 * f, B)
-    plt.xlim(0, 150)
-    plt.show()
+        plt.plot(30 * f, B)
+        plt.xlim(0, 150)
+        plt.show()
 
+    print("Frecuencia cardiaca R: ", abs(f[np.argmax(R)]) * 60, " pulsaciones por minuto")
     print("Frecuencia cardiaca G: ", abs(f[np.argmax(G)]) * 60, " pulsaciones por minuto")
     print("Frecuencia cardiaca B: ", abs(f[np.argmax(B)]) * 60, " pulsaciones por minuto")
-    print("Frecuencia cardiaca R: ", abs(f[np.argmax(R)]) * 60, " pulsaciones por minuto")
