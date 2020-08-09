@@ -1,7 +1,6 @@
 import argparse
 from argparse import RawTextHelpFormatter
 import os
-import time
 import heartrate
 
 WEBCAM_ON = False
@@ -59,15 +58,14 @@ def main():
   # get parser
   parser = argumentParser()
   parsedArgs = parser.parse_args()
-  start = time.time()
+  
   isTest = False
   if parsedArgs.test:
       isTest = True
 
   if parsedArgs.videoPath:
     heartrate.analyze(parsedArgs.videoPath, isTest, parsedArgs.minFilter, parsedArgs.maxFilter)
-    end = time.time()
-    print("Estimated processing time:{}".format(end - start))
+    
 
   else:
     parser.print_help()

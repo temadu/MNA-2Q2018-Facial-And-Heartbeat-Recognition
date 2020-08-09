@@ -9,9 +9,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 import fourier as fourier
+import time
 
 
 def analyze(videoPath, isTest, minFilter, maxFilter):
+    start = time.time()
     cap = cv2.VideoCapture(videoPath)
     # cap = cv2.VideoCapture('toti.mp4')
 
@@ -23,10 +25,10 @@ def analyze(videoPath, isTest, minFilter, maxFilter):
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     fps = cap.get(cv2.CAP_PROP_FPS)
-    print(length)
-    print(width)
-    print(height)
-    print(fps)
+    print()
+    print("Video length: {:.2f}s or {} frames".format(length/fps, length))
+    print("Video resolution: {}x{}".format(width, height))
+    print("FPS:{:.3f}\n".format(fps))
 
     r = np.zeros((1, length))
     g = np.zeros((1, length))
@@ -68,6 +70,8 @@ def analyze(videoPath, isTest, minFilter, maxFilter):
     R = np.abs(np.fft.fftshift(fourier.fft(r))) ** 2
     G = np.abs(np.fft.fftshift(fourier.fft(g))) ** 2
     B = np.abs(np.fft.fftshift(fourier.fft(b))) ** 2
+    end = time.time()
+    print("Estimated processing time:{:.3f}s".format(end - start))
 
     if isTest:
         plt.plot(60 * f, R)
@@ -76,6 +80,7 @@ def analyze(videoPath, isTest, minFilter, maxFilter):
         plt.plot(60 * f, G)
         plt.xlim(0, 150)
         plt.xlabel("frecuencia [1/minuto]")
+        plt.ylabel("amplitud")
 
         plt.plot(30 * f, B)
         plt.xlim(0, 150)
