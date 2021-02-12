@@ -47,3 +47,13 @@ optional arguments:
                             Path of file to check
       --test                Test flag to show graphics and check error
 ```
+
+## TP2: Heartrate Recognition based on PPG
+
+Python libraries required: 
+- numpy
+- cmath
+- scipy
+- opencv-python
+- matplotlib
+- argparse
